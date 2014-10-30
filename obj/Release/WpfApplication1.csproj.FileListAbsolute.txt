@@ -1,0 +1,15 @@
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\bin\Release\Typing_3CA.exe.config
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\bin\Release\Typing_3CA.exe
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\bin\Release\Typing_3CA.pdb
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Release\MainWindow.baml
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Release\MainWindow.g.cs
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Release\App.g.cs
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Release\Typing_3CA_MarkupCompile.cache
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Release\Typing_3CA.g.resources
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Release\Typing.Properties.Resources.resources
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Release\WpfApplication1.csproj.GenerateResource.Cache
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Release\Typing_3CA.exe
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Release\Typing_3CA.pdb
+C:\Users\u8kun\Desktop\typing_z\WpfApplication1\WpfApplication1\bin\Release\Typing_3CA.exe.config
+C:\Users\u8kun\Desktop\typing_z\WpfApplication1\WpfApplication1\obj\Release\Typing_3CA.exe
+C:\Users\u8kun\Desktop\typing_z\WpfApplication1\WpfApplication1\obj\Release\Typing_3CA.pdb

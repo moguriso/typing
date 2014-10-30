@@ -1,0 +1,15 @@
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\bin\Debug\Typing_3CA.exe.config
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\bin\Debug\Typing_3CA.exe
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\bin\Debug\Typing_3CA.pdb
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Debug\MainWindow.baml
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Debug\MainWindow.g.cs
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Debug\App.g.cs
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Debug\Typing_3CA_MarkupCompile.cache
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Debug\Typing_3CA.g.resources
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Debug\Typing.Properties.Resources.resources
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Debug\WpfApplication1.csproj.GenerateResource.Cache
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Debug\Typing_3CA.exe
+C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Debug\Typing_3CA.pdb
+C:\MinGW\msys\1.0\home\u8kun\repo\typing\bin\Debug\Typing_3CA.exe.config
+C:\MinGW\msys\1.0\home\u8kun\repo\typing\obj\Debug\Typing_3CA.exe
+C:\MinGW\msys\1.0\home\u8kun\repo\typing\obj\Debug\Typing_3CA.pdb
