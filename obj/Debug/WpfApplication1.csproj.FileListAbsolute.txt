@@ -13,3 +13,16 @@ C:\work\test_app\typing_z\WpfApplication1\WpfApplication1\obj\Debug\Typing_3CA.p
 C:\MinGW\msys\1.0\home\u8kun\repo\typing\bin\Debug\Typing_3CA.exe.config
 C:\MinGW\msys\1.0\home\u8kun\repo\typing\obj\Debug\Typing_3CA.exe
 C:\MinGW\msys\1.0\home\u8kun\repo\typing\obj\Debug\Typing_3CA.pdb
+\\192.168.33.9\moguriso\repo\typing\bin\Debug\Typing_3CA.exe.config
+\\192.168.33.9\moguriso\repo\typing\obj\Debug\Typing_3CA.exe
+\\192.168.33.9\moguriso\repo\typing\obj\Debug\Typing_3CA.pdb
+\\192.168.33.9\moguriso\repo\typing\obj\Debug\WpfApplication1.csprojResolveAssemblyReference.cache
+\\192.168.33.9\moguriso\repo\typing\obj\Debug\MainWindow.baml
+\\192.168.33.9\moguriso\repo\typing\obj\Debug\MainWindow.g.cs
+\\192.168.33.9\moguriso\repo\typing\obj\Debug\App.g.cs
+\\192.168.33.9\moguriso\repo\typing\obj\Debug\Typing_3CA_MarkupCompile.cache
+\\192.168.33.9\moguriso\repo\typing\obj\Debug\Typing_3CA.g.resources
+\\192.168.33.9\moguriso\repo\typing\obj\Debug\Typing.Properties.Resources.resources
+\\192.168.33.9\moguriso\repo\typing\obj\Debug\WpfApplication1.csproj.GenerateResource.Cache
+\\192.168.33.9\moguriso\repo\typing\bin\Debug\Typing_3CA.exe
+\\192.168.33.9\moguriso\repo\typing\bin\Debug\Typing_3CA.pdb
