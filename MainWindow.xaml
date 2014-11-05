@@ -12,12 +12,12 @@
                 <DropShadowEffect/>
             </Label.Effect>
         </Label>
-        <Label x:Name="label2" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Height="151" Width="348" FontSize="36" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="True" UseLayoutRounding="True" Margin="140,0,0,0">
+        <Label x:Name="label2" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Height="151" Width="598" FontSize="36" HorizontalContentAlignment="Center" ScrollViewer.CanContentScroll="True" UseLayoutRounding="True" Margin="10,0,0,0">
             <Label.Effect>
                 <DropShadowEffect ShadowDepth="3"/>
             </Label.Effect>
         </Label>
-        <Label x:Name="label4" Content="Label" Margin="0,0,10,0" FontSize="90" ScrollViewer.CanContentScroll="True" UseLayoutRounding="True" HorizontalContentAlignment="Right" Width="264" VerticalContentAlignment="Bottom" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+        <Label x:Name="label4" Content="Label" FontSize="90" ScrollViewer.CanContentScroll="True" UseLayoutRounding="True" HorizontalContentAlignment="Right" Width="618" VerticalContentAlignment="Bottom" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="-1,0,1,0">
             <Label.Effect>
                 <DropShadowEffect/>
             </Label.Effect>
@@ -32,7 +32,7 @@
                 <DropShadowEffect/>
             </Label.Effect>
         </Label>
-        <Label x:Name="label5" Content="Label" HorizontalAlignment="Left" Height="83" Margin="166,0,0,10" VerticalAlignment="Bottom" Width="437" FontSize="24" Foreground="#FFFFAE00" FontWeight="Bold" UseLayoutRounding="True" Grid.IsSharedSizeScope="True" ScrollViewer.CanContentScroll="True">
+        <Label x:Name="label5" Content="Label" HorizontalAlignment="Left" Height="83" Margin="10,0,0,131" VerticalAlignment="Bottom" Width="598" FontSize="24" Foreground="#FFFFAE00" FontWeight="Bold" UseLayoutRounding="True" Grid.IsSharedSizeScope="True" ScrollViewer.CanContentScroll="True">
             <Label.Effect>
                 <DropShadowEffect Color="#FF3C3C3C" ShadowDepth="2"/>
             </Label.Effect>
