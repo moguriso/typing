@@ -22,7 +22,7 @@
                 <DropShadowEffect/>
             </Label.Effect>
         </Label>
-        <Image Source="Image1.png" Stretch="Fill" UseLayoutRounding="True" HorizontalAlignment="Left" Width="201" VerticalAlignment="Bottom" Height="187" MouseDown="onMouseDown">
+        <Image Source="Image1.png" Stretch="Fill" UseLayoutRounding="True" HorizontalAlignment="Left" Width="166" VerticalAlignment="Bottom" Height="161" MouseDown="onMouseDown">
             <Image.OpacityMask>
                 <ImageBrush ImageSource="3CA-RGB.png"/>
             </Image.OpacityMask>
@@ -32,5 +32,13 @@
                 <DropShadowEffect/>
             </Label.Effect>
         </Label>
+        <Label x:Name="label5" Content="Label" HorizontalAlignment="Left" Height="83" Margin="166,0,0,10" VerticalAlignment="Bottom" Width="437" FontSize="24" Foreground="#FFFFAE00" FontWeight="Bold" UseLayoutRounding="True" Grid.IsSharedSizeScope="True" ScrollViewer.CanContentScroll="True">
+            <Label.Effect>
+                <DropShadowEffect Color="#FF3C3C3C" ShadowDepth="2"/>
+            </Label.Effect>
+        </Label>
+        <Label x:Name="label6" Content="Label" HorizontalAlignment="Right" Height="38" Margin="439,323,0,0" VerticalAlignment="Top" Width="169" FontSize="24" MouseMove="EasyMouseMove" MouseLeave="EasyMouseLeave" MouseDown="EasyModeOn" UseLayoutRounding="True" ScrollViewer.CanContentScroll="True"/>
+        <Label x:Name="label7" Content="Label" HorizontalAlignment="Right" Height="38" Margin="439,366,0,0" VerticalAlignment="Top" Width="169" FontSize="24" MouseMove="NormalMouseMove" MouseLeave="NormalMouseLeave" MouseDown="NormalModeOn" UseLayoutRounding="True" ScrollViewer.CanContentScroll="True"/>
+        <Label x:Name="label8" Content="Label" HorizontalAlignment="Right" Height="38" Margin="439,409,0,0" VerticalAlignment="Top" Width="169" FontSize="24" MouseMove="ChampionMouseMove" MouseLeave="ChampionMouseLeave" MouseDown="ChampionModeOn" UseLayoutRounding="True" ScrollViewer.CanContentScroll="True"/>
     </Grid>
 </Window>

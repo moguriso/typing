@@ -36,8 +36,14 @@ namespace WpfApplication1
 
             this.label3.Visibility = Visibility.Hidden;
             this.label3.Content = "Miss!!";
+
             this.m_typing = new typing();
             initForm(true);
+
+            this.label5.Content = tP.getGameModeString();
+            this.label6.Content = "Easy";
+            this.label7.Content = "Normal";
+            this.label8.Content = "Champion";
         }
 
 
@@ -110,10 +116,35 @@ namespace WpfApplication1
             {
                 case typingParams.GAME_STATE.GAME_STARTED:
                     {
+                        String modeStr = tP.getGameModeString();
+
+                        tP.randomTargetString();
+                        tP.championTargetString();
+
+                        tP.setFirstChar();
+
                         this.label1.FontSize = 300;
                         this.label1.Content = tP.getViewString();
-                        this.label2.Content = tP.getCurrentString();
-                        tP.setFirstChar();
+                        this.label6.Visibility = Visibility.Hidden;
+                        this.label7.Visibility = Visibility.Hidden;
+                        this.label8.Visibility = Visibility.Hidden;
+                        
+                        if (tP.getGameMode() == typingParams.GAME_MODE.EASY_MODE)
+                        {
+                            this.label2.Content = tP.getCurrentString();
+                        }
+
+                        if (tP.getAorZmode() == true)
+                        {
+                            modeStr += "\n(A → Z)";
+                        }
+                        else
+                        {
+                            modeStr += "\n(Z → A)";
+                        }
+
+                        label5.Content = modeStr;
+
                         this.disTimer.Start();
                         break;
                     }
@@ -155,6 +186,10 @@ namespace WpfApplication1
                         String tex = this.m_typing.getGameResult();
                         System.Windows.MessageBox.Show(tex, "結果発表");
                         initForm(true);
+                        this.label5.Content = tP.getGameModeString();
+                        this.label6.Visibility = Visibility.Visible;
+                        this.label7.Visibility = Visibility.Visible;
+                        this.label8.Visibility = Visibility.Visible;
                         break;
                     }
 
@@ -167,6 +202,57 @@ namespace WpfApplication1
         private void onMouseDown(object sender, MouseButtonEventArgs e)
         {
             Process.Start("http://www.3ca.co.jp");
+        }
+
+        private void EasyMouseMove(object sender, MouseEventArgs e)
+        {
+            label6.Foreground = new SolidColorBrush(Colors.Aqua);
+        }
+
+        private void EasyMouseLeave(object sender, MouseEventArgs e)
+        {
+            label6.Foreground = new SolidColorBrush(Colors.Black);
+        }
+
+        private void EasyModeOn(object sender, MouseButtonEventArgs e)
+        {
+            typingParams tP = typingParams.getInstance();
+            tP.setGameMode("easy");
+            this.label5.Content = tP.getGameModeString();
+        }
+
+        private void NormalMouseMove(object sender, MouseEventArgs e)
+        {
+            label7.Foreground = new SolidColorBrush(Colors.Aqua);
+        }
+
+        private void NormalMouseLeave(object sender, MouseEventArgs e)
+        {
+            label7.Foreground = new SolidColorBrush(Colors.Black);
+        }
+
+        private void NormalModeOn(object sender, MouseButtonEventArgs e)
+        {
+            typingParams tP = typingParams.getInstance();
+            tP.setGameMode("normal");
+            this.label5.Content = tP.getGameModeString();
+        }
+
+        private void ChampionMouseMove(object sender, MouseEventArgs e)
+        {
+            label8.Foreground = new SolidColorBrush(Colors.Aqua);
+        }
+
+        private void ChampionMouseLeave(object sender, MouseEventArgs e)
+        {
+            label8.Foreground = new SolidColorBrush(Colors.Black);
+        }
+
+        private void ChampionModeOn(object sender, MouseButtonEventArgs e)
+        {
+            typingParams tP = typingParams.getInstance();
+            tP.setGameMode("champion");
+            this.label5.Content = tP.getGameModeString();
         }
     }
 }

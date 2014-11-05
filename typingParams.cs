@@ -12,23 +12,33 @@ namespace Typing
         private static typingParams instance = null;
 
         #region 固定パラメータ
-        public const String INI_TAG_TARGET1 = "TargetString1";
-        public const String INI_TAG_TARGET2 = "TargetString2";
-        public const String INI_TAG_TARGET3 = "TargetString3";
-        public const String NUMBER_OF_PLAYERS = "NumberOfPlayers";
-        public const String INI_FILE_NAME = "typing.ini";
+        public const String INI_TAG_TARGET1      = "TargetString1";
+        public const String INI_TAG_TARGET2      = "TargetString2";
+        public const String INI_TAG_TARGET3      = "TargetString3";
+        public const String NUMBER_OF_PLAYERS    = "NumberOfPlayers";
+        public const String INI_TAG_GAME_MODE    = "GameMode";
+        public const String INI_TAG_RANDOM_MODE = "RandomeMode";
+        public const String INI_FILE_NAME        = "typing.ini";
 
-        public enum GAME_STATE {
-                                   NON_OF_PARAM=0, 
-                                   START_STATE,
-                                   STOP_STATE,
-                                   GAME_STARTED,
-                                   CONTINUE_INPUT,
-                                   GO_TO_NEXT_PLAYER,
-                                   MISS_ENTER,
-                                   GAME_IS_OVER,
-                                   CONTINUE_GAME
-                               };
+        public enum GAME_STATE
+        {
+            NON_OF_PARAM = 0,
+            START_STATE,
+            STOP_STATE,
+            GAME_STARTED,
+            CONTINUE_INPUT,
+            GO_TO_NEXT_PLAYER,
+            MISS_ENTER,
+            GAME_IS_OVER,
+            CONTINUE_GAME
+        };
+
+        public enum GAME_MODE
+        {
+            EASY_MODE = 0,
+            NORMAL_MODE,
+            CHAMPION_MODE
+        };
         #endregion
 
         #region ゲーム用パラメータ
@@ -38,6 +48,12 @@ namespace Typing
         private String[] targetArray;
         private StringBuilder poolString;
         private int curPos = 0;
+
+        private typingParams.GAME_MODE gameMode = typingParams.GAME_MODE.EASY_MODE;
+        private bool isRandom = false;
+
+        private bool isNeedRandom = true;
+        private bool isNeedChampion = true;
 
         private int curPlayer = 0;      /* 0:1人目, 1:2人目, 2:3人目 */
         private int[] player_len;
@@ -52,11 +68,6 @@ namespace Typing
             /* デフォルト値を設定 => iniファイルに設定がある場合は上書き */
             this.Tick = 100000;
             this.NumberOfPlayer = 3;
-        }
-
-        ~typingParams()
-        {
-
         }
 
         static public typingParams getInstance()
@@ -93,7 +104,148 @@ namespace Typing
         public void setFirstChar()
         {
             String inStr = this.targetArray[this.curPos];
-            this.poolString.Append(inStr);
+
+            /* EASYモード以外では次に入力する文字をださない */
+            if (this.getGameMode() == typingParams.GAME_MODE.EASY_MODE)
+            {
+                this.poolString.Append(inStr);
+            }
+        }
+
+        public bool getAorZmode()
+        {
+            bool r_inf = false;
+
+            if (this.targetArray[this.curPos].IndexOf("A") != -1)
+            {
+                r_inf = true;
+            }
+
+            return r_inf;
+        }
+
+        public void championTargetString()
+        {
+            if (this.isNeedChampion == false)
+            {
+                /* 2回以上呼ばれると困る箇所から呼び出されるので */
+                /* 2回目以上の呼び出しは無視する                 */
+                /* 実装的に大変微妙なので出来れば直したい        */
+                return;
+            }
+
+            if (this.getGameMode() == typingParams.GAME_MODE.CHAMPION_MODE)
+            {
+                int p1 = this.player_len[0];
+
+                String[] tmp1 = new String[p1];
+
+                for (int ii = 0; ii < tmp1.Length; ii++)
+                {
+                    tmp1[ii] = this.targetArray[ii];
+                }
+                tmp1.CopyTo(this.targetArray, p1);
+                this.isNeedChampion = false;
+            }
+        }
+
+        public void randomTargetString()
+        {
+            if (this.isNeedRandom == false)
+            {
+                /* 2回以上呼ばれると困る箇所から呼び出されるので */
+                /* 2回目以上の呼び出しは無視する                 */
+                /* 実装的に大変微妙なので出来れば直したい        */
+                return;
+            }
+
+            /* ランダム設定の場合のみ、問題のランダマイズを行う */
+            /* iniファイルに設定された問題の設定順が            */
+            /* 変更されたりすると途端に挙動がおかしくなる       */
+            /* 可能性があります                                 */
+            /* チャンピオンモードはひたすら高速にA->Zするモード */
+            /* なのでランダム化させない                         */
+            if ((this.getGameMode() != typingParams.GAME_MODE.CHAMPION_MODE)
+                &&(this.isRandom == true))
+            {
+                Random rnd = new System.Random();
+                int ret = rnd.Next(1, 100);
+
+                if (ret < 50)
+                {
+                    int p1 = this.player_len[0];
+                    int p2 = this.player_len[1] - p1;
+
+                    String[] tmp1 = new String[p1];
+                    String[] tmp2 = new String[p2];
+
+                    for (int ii = 0; ii < tmp1.Length; ii++)
+                    {
+                        tmp1[ii] = this.targetArray[p1 + ii];
+                    }
+
+                    for (int jj = 0; jj < tmp2.Length; jj++)
+                    {
+                        tmp2[jj] = this.targetArray[jj];
+                    }
+                    tmp1.CopyTo(this.targetArray, 0);
+                    tmp2.CopyTo(this.targetArray, p1);
+                    Debug.WriteLine("randomize ok");
+                }
+                else
+                {
+                    Debug.WriteLine("not randomaized");
+                }
+                this.isNeedRandom = false;
+            }
+        }
+
+        public void setGameMode(String mode)
+        {
+            mode = mode.ToLower();
+            if (mode.IndexOf("easy") != -1)
+            {
+                this.gameMode = typingParams.GAME_MODE.EASY_MODE;
+            }
+            else if (mode.IndexOf("normal") != -1)
+            {
+                this.gameMode = typingParams.GAME_MODE.NORMAL_MODE;
+            }
+            else if(mode.IndexOf("champion") != -1)
+            {
+                this.gameMode = typingParams.GAME_MODE.CHAMPION_MODE;
+            }
+        }
+
+        public void setRandomeMode(bool isSetRandom)
+        {
+            this.isRandom = isSetRandom;
+        }
+
+        public GAME_MODE getGameMode()
+        {
+            return this.gameMode;
+        }
+
+        public String getGameModeString()
+        {
+            GAME_MODE gm = this.getGameMode();
+            String rStr = "";
+            switch (gm)
+            {
+                case typingParams.GAME_MODE.EASY_MODE:
+                    rStr = "Easy Mode";
+                    break;
+
+                case typingParams.GAME_MODE.NORMAL_MODE:
+                    rStr = "Normal Mode";
+                    break;
+
+                case typingParams.GAME_MODE.CHAMPION_MODE:
+                    rStr = "Champion Mode";
+                    break;
+            }
+            return rStr;
         }
 
         private int getPlayerCenterPos(int player)
@@ -203,7 +355,8 @@ namespace Typing
         {
             String rStr = "";
 
-            /* 各プレイヤーの先頭文字の場合は空白にして、以降は入力した文字が出るようにする */
+            /* 各プレイヤーの先頭文字の場合は空白にして    */
+            /* 以降は入力した文字が出るようにする          */
             if ((this.curPos != 0) && (this.curPos != this.getCurrentPlayerArrayTop()))
             {
                 int pos = this.curPos - 1;
@@ -233,11 +386,16 @@ namespace Typing
             int pos = this.getCurrentPos();
             if (pos < this.targetArray.Length)
             {
-                this.poolString.Append(this.getTargetString(this.curPos + 1));
+                int strPos = this.curPos;
+                if (this.getGameMode() == typingParams.GAME_MODE.EASY_MODE)
+                {
+                    strPos += 1; /* 次の入力文字を表示する */
+                }
+                this.poolString.Append(this.getTargetString(strPos));
 
-                /* 問題（文字）は1つの配列に詰め込んであるので、改行箇所(プレイヤー  *
-                 * ごとの出題文字列の中間を計算するために、出題済みの長さ分を現在の  *
-                 * 位置から減算する（０オリジンにする）                              */
+                /* 問題（文字）は1つの配列に詰め込んであるので、改行箇所(プレイヤー   *
+                 * ごとの出題文字列の中間)を計算するために、出題済みの長さ分を現在の  *
+                 * 位置から減算する（０オリジンにする）                               */
 
                 int separatePos = pos;
                 int prevPlayer = this.getCurrentPlayer() - 1;
@@ -245,6 +403,7 @@ namespace Typing
                 {
                     separatePos -= this.player_len[prevPlayer];
                 }
+
                 if (separatePos == this.getPlayerCenterPos(this.getCurrentPlayer()))
                 {
                     this.poolString.Append("\n");

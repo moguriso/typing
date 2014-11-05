@@ -35,6 +35,22 @@ namespace Typing
                         String[] t = rStr.Split('=');
                         tP.setNumberOfPlayer(Convert.ToInt32(t[1]));
                     }
+                    else if (rStr.IndexOf(typingParams.INI_TAG_GAME_MODE) != -1)
+                    {
+                        String[] t = rStr.Split('=');
+                        tP.setGameMode(t[1]);
+                    }
+                    else if(rStr.IndexOf(typingParams.INI_TAG_RANDOM_MODE) != -1)
+                    {
+                        String[] t = rStr.Split('=');
+                        bool setVal = false;
+                        t[1].ToLower();
+                        if (t[1].IndexOf("true") != -1)
+                        {
+                            setVal = true;
+                        }
+                        tP.setRandomeMode(setVal);
+                    }
                 }
                 sr.Close();
                 tP.initParams();
@@ -93,7 +109,14 @@ namespace Typing
                     int pos = 0;
                     if (tP.genTargetArray(len) == true)
                     {
-                        /* FIXME: とてもイケてない実装なので暇な人直して下さい */
+                        /* ------------------------------------------------------------- */
+                        /* FIXME: とてもイケてない実装なので暇な人直して下さい           */
+                        /* THE REASON WHY: 1. 同じ処理を参加人数ごとに追加する必要が有る */
+                        /*                 2. 類似の処理なのに複数回コールしている       */
+                        /*                 3. setTargetString自体が出題数に依存する作り  */
+                        /* iniパーサだけで独立させた方がいいような気はします             */
+                        /* が、其処までのモチベーションが湧かないので出来てません        */
+                        /* ------------------------------------------------------------- */
                         tP.setTargetArray(x, pos);
                         pos += x.Length;
                         tP.setPlayerLength(0, pos);
