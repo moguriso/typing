@@ -1,7 +1,8 @@
-﻿<Window x:Name="MainForm" x:Class="WpfApplication1.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="3CA-Typing" Height="607.642" Width="626.493" KeyDown="onKeyDown">
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Name="MainForm" x:Class="WpfApplication1.MainWindow"
+        Title="3CA-Typing" Height="607.642" Width="659.493" KeyDown="onKeyDown">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -22,17 +23,8 @@
                 <DropShadowEffect/>
             </Label.Effect>
         </Label>
-        <Image Source="Image1.png" Stretch="Fill" UseLayoutRounding="True" HorizontalAlignment="Left" Width="166" VerticalAlignment="Bottom" Height="161" MouseDown="onMouseDown">
-            <Image.OpacityMask>
-                <ImageBrush ImageSource="3CA-RGB.png"/>
-            </Image.OpacityMask>
-        </Image>
-        <Label x:Name="label3" Content="Label" Margin="10,60,10,0" VerticalAlignment="Top" Height="331" FontSize="180" HorizontalContentAlignment="Center" Foreground="#FFFF00E8" ClipToBounds="True" SnapsToDevicePixels="True">
-            <Label.Effect>
-                <DropShadowEffect/>
-            </Label.Effect>
-        </Label>
-        <Label x:Name="label5" Content="Label" HorizontalAlignment="Left" Height="83" Margin="10,0,0,131" VerticalAlignment="Bottom" Width="598" FontSize="24" Foreground="#FFFFAE00" FontWeight="Bold" UseLayoutRounding="True" Grid.IsSharedSizeScope="True" ScrollViewer.CanContentScroll="True">
+        <Image x:Name="logo" Source="Image1.png" Stretch="Fill" UseLayoutRounding="True" HorizontalAlignment="Left" Width="166" VerticalAlignment="Bottom" Height="161" MouseDown="onMouseDown"/>
+        <Label x:Name="label5" Content="Label" HorizontalAlignment="Left" Height="83" Margin="10,0,0,129" VerticalAlignment="Bottom" Width="598" FontSize="24" Foreground="#FFFFAE00" FontWeight="Bold" UseLayoutRounding="True" Grid.IsSharedSizeScope="True" ScrollViewer.CanContentScroll="True">
             <Label.Effect>
                 <DropShadowEffect Color="#FF3C3C3C" ShadowDepth="2"/>
             </Label.Effect>
@@ -40,5 +32,12 @@
         <Label x:Name="label6" Content="Label" HorizontalAlignment="Right" Height="38" Margin="439,323,0,0" VerticalAlignment="Top" Width="169" FontSize="24" MouseMove="EasyMouseMove" MouseLeave="EasyMouseLeave" MouseDown="EasyModeOn" UseLayoutRounding="True" ScrollViewer.CanContentScroll="True"/>
         <Label x:Name="label7" Content="Label" HorizontalAlignment="Right" Height="38" Margin="439,366,0,0" VerticalAlignment="Top" Width="169" FontSize="24" MouseMove="NormalMouseMove" MouseLeave="NormalMouseLeave" MouseDown="NormalModeOn" UseLayoutRounding="True" ScrollViewer.CanContentScroll="True"/>
         <Label x:Name="label8" Content="Label" HorizontalAlignment="Right" Height="38" Margin="439,409,0,0" VerticalAlignment="Top" Width="169" FontSize="24" MouseMove="ChampionMouseMove" MouseLeave="ChampionMouseLeave" MouseDown="ChampionModeOn" UseLayoutRounding="True" ScrollViewer.CanContentScroll="True"/>
+        <Image x:Name="skel" Margin="10" Source="skel.png" Stretch="Fill" Visibility="Hidden"/>
+        <Image x:Name="yamochi" Margin="0,0,10,10" Source="yamochi.png" ClipToBounds="True" SnapsToDevicePixels="True" ScrollViewer.CanContentScroll="True" UseLayoutRounding="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="558" Width="641" Visibility="Hidden"/>
+        <Label x:Name="label3" Content="Label" Margin="10,60,10,0" VerticalAlignment="Top" Height="331" FontSize="180" HorizontalContentAlignment="Center" Foreground="#FFFF00E8" ClipToBounds="True" SnapsToDevicePixels="True">
+            <Label.Effect>
+                <DropShadowEffect/>
+            </Label.Effect>
+        </Label>
     </Grid>
 </Window>

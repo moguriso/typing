@@ -17,8 +17,10 @@ namespace Typing
         public const String INI_TAG_TARGET3      = "TargetString3";
         public const String NUMBER_OF_PLAYERS    = "NumberOfPlayers";
         public const String INI_TAG_GAME_MODE    = "GameMode";
-        public const String INI_TAG_RANDOM_MODE = "RandomeMode";
+        public const String INI_TAG_RANDOM_MODE  = "RandomeMode";
+        public const String INI_TAG_TIME_LIMIT   = "TimeLimit";
         public const String INI_FILE_NAME        = "typing.ini";
+        public const String RESULT_FILE_NAME     = "result";
 
         public enum GAME_STATE
         {
@@ -30,7 +32,8 @@ namespace Typing
             GO_TO_NEXT_PLAYER,
             MISS_ENTER,
             GAME_IS_OVER,
-            CONTINUE_GAME
+            CONTINUE_GAME,
+            TERMINATE_GAME
         };
 
         public enum GAME_MODE
@@ -61,6 +64,8 @@ namespace Typing
         private double[] player_time;
         private bool TimerState = false;
         private double inputTime = 0.0f;
+        private int playCount = 0;
+        private int limitTime = 30;
         #endregion
 
         private typingParams()
@@ -92,6 +97,8 @@ namespace Typing
                 this.curPlayer = 0;
                 this.inputTime = 0.0f;
                 this.targetArray = null;
+                this.isNeedChampion = true;
+                this.isNeedRandom = true;
                 r_inf = true;
             }
             catch (Exception ex)
@@ -110,6 +117,16 @@ namespace Typing
             {
                 this.poolString.Append(inStr);
             }
+        }
+
+        public void incPlayCount()
+        {
+            this.playCount++;
+        }
+
+        public int getPlayCount()
+        {
+            return this.playCount;
         }
 
         public bool getAorZmode()
@@ -147,6 +164,21 @@ namespace Typing
                 tmp1.CopyTo(this.targetArray, p1);
                 this.isNeedChampion = false;
             }
+        }
+
+        public void setTimeLimit(String val)
+        {
+            int limit = Convert.ToInt32(val);
+            if (limit < 1)
+            {
+                limit = 30; /* 不正な値はデフォルト値(30)で上書き */
+            }
+            this.limitTime = limit;
+        }
+
+        public int getTimeLimit()
+        {
+            return this.limitTime;
         }
 
         public void randomTargetString()
@@ -271,6 +303,34 @@ namespace Typing
         public int getCurrentPlayer()
         {
             return this.curPlayer;
+        }
+
+        public String getCurrentPlayerString()
+        {
+            int p = getCurrentPlayer();
+            String rStr = "";
+            switch (p)
+            {
+                case 0:
+                    rStr = "1st";
+                    break;
+
+                case 1:
+                    rStr = "2nd";
+                    break;
+
+                case 2:
+                    rStr = "3rd";
+                    break;
+
+                default:
+                    { /* 4人目以降は他の実装がいい加減なので当てにしないで下さい */
+                        int t = p + 1;
+                        rStr = String.Format("{0]th", t);
+                        break;
+                    }
+            }
+            return rStr;
         }
 
         private int getPrevPlayerLength()

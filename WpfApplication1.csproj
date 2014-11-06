@@ -96,10 +96,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="3CA-RGB.png" />
+    <Resource Include="Image1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Image1.png" />
+    <Resource Include="yamochi.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="skel.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

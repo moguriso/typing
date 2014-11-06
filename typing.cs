@@ -51,6 +51,12 @@ namespace Typing
                         }
                         tP.setRandomeMode(setVal);
                     }
+                    else if (rStr.IndexOf(typingParams.INI_TAG_TIME_LIMIT) != -1)
+                    {
+                        String[] t = rStr.Split('=');
+                        t[1].ToLower();
+                        tP.setTimeLimit(t[1]);
+                    }
                 }
                 sr.Close();
                 tP.initParams();
@@ -159,6 +165,36 @@ namespace Typing
             return sr;
         }
 
+        public bool writeResultDataToFile(String resultStr)
+        {
+            bool r_inf = false;
+            try
+            {
+                typingParams tP = typingParams.getInstance();
+                StringBuilder sb = new StringBuilder();
+                DateTime dt = new DateTime();
+                dt = DateTime.Now;
+                String date = String.Format("{0:D4}{1:D2}{2:D2}",dt.Year, dt.Month, dt.Day);
+                StreamWriter sw = new StreamWriter(typingParams.RESULT_FILE_NAME + date + ".txt", true);
+
+                sb.Append("\n------------------------------\n\n");
+                sb.Append(String.Format("{0:D2}時{1:D2}分{2:D2}秒({3})\n\n",
+                                        dt.Hour, dt.Minute, dt.Second, tP.getGameModeString()));
+                sb.Append(resultStr);
+                sb.Append("\n");
+
+                sw.WriteLine(sb.ToString());
+                sw.Close();
+
+                r_inf = true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+            return r_inf;
+        }
+
         private typingParams.GAME_STATE checkNextPlayer(int curPos)
         {
             typingParams.GAME_STATE r_inf = typingParams.GAME_STATE.CONTINUE_INPUT;
@@ -168,8 +204,21 @@ namespace Typing
             if (curPos == termPos)
             {
                 tP.setTimerState(false);
-                tP.setPlayerTime(tP.getCurrentPlayer(), tP.getInputTime());
-                tP.clearInputTime();
+
+                if (tP.getGameMode() == typingParams.GAME_MODE.CHAMPION_MODE)
+                {
+                    double tmp = tP.getInputTime();
+                    int cP = tP.getCurrentPlayer();
+                    for (int ii = 0; ii < cP; ii++)
+                    {
+                        tmp = tmp - tP.getPlayerTime(ii);
+                    }
+                    tP.setPlayerTime(cP, tmp);
+                }
+                else{
+                    tP.setPlayerTime(tP.getCurrentPlayer(), tP.getInputTime());
+                    tP.clearInputTime();
+                }
 
                 if (tP.getCurrentPlayer() == tP.getLastPlayer())
                 {
@@ -194,6 +243,11 @@ namespace Typing
                 tP.incCurrentPos();
                 r_inf = checkNextPlayer(tP.getCurrentPos());
             }
+            else if (enter.Equals("Escape") == true)
+            {
+                /* ESCキーでゲームを強制終了する */
+                r_inf = typingParams.GAME_STATE.TERMINATE_GAME;
+            }
             else
             {
                 r_inf = typingParams.GAME_STATE.MISS_ENTER;
@@ -208,16 +262,12 @@ namespace Typing
 
             if (tP.getTimerState() == true)
             {
-                //isStarted = false; /* 既にゲーム開始されているので状態変えない */
                 r_inf = this.getKeyInput(enter);
             }
-            else
+            else  if(enter.Equals("Space") == true)
             {
-                if (enter.Equals("Space") == true)
-                {
-                    tP.setTimerState(true);
-                    r_inf = typingParams.GAME_STATE.GAME_STARTED;
-                }
+                tP.setTimerState(true);
+                r_inf = typingParams.GAME_STATE.GAME_STARTED;
             }
             return r_inf;
         }
@@ -227,9 +277,19 @@ namespace Typing
             typingParams tP = typingParams.getInstance();
             StringBuilder sb = new StringBuilder();
             String tStr = "";
+            String fmt = "";
             int playerNum = tP.getCurrentPlayer();
+
+            if (tP.getGameMode() == typingParams.GAME_MODE.CHAMPION_MODE)
+            {
+                fmt = "{0}回目\n{1:F2}秒でした";
+            }
+            else
+            {
+                fmt = "{0}人目\n{1:F2}秒でした";
+            }
             
-            tStr = String.Format("{0}人目\n{1:F2}秒でした", playerNum+1, tP.getPlayerTime(playerNum));
+            tStr = String.Format(fmt, playerNum+1, tP.getPlayerTime(playerNum));
             sb.Append(tStr);
             return sb.ToString();
         }
@@ -239,12 +299,22 @@ namespace Typing
             typingParams tP = typingParams.getInstance();
             StringBuilder sb = new StringBuilder();
             String tStr = "";
+            String fmt = "";
             int numOfplayer = tP.getNumberOfPlayer();
             double total_time = tP.getTotalInputTime();
 
+            if(tP.getGameMode() == typingParams.GAME_MODE.CHAMPION_MODE)
+            {
+                fmt = "{0:D0}回目：{1:F2}秒\n";
+            }
+            else
+            {
+                fmt = "{0:D0}人目：{1:F2}秒\n";
+            }
+
             for(int ii=0; ii<tP.getNumberOfPlayer(); ii++)
             {
-                tStr = String.Format("{0:D0}人目：{1:F2}秒\n", (ii+1), tP.getPlayerTime(ii));
+                tStr = String.Format(fmt, (ii+1), tP.getPlayerTime(ii));
                 sb.Append(tStr);
             }
             tStr = String.Format("合計：{0:F2}秒でした", total_time);

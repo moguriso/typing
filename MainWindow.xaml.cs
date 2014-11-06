@@ -27,6 +27,10 @@ namespace WpfApplication1
         private DispatcherTimer disTimer;
         private typing m_typing = null;
 
+        private byte m_bgRatio = 0;
+        private int m_changeTimingCount = 0;
+        private bool isGameOver = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -40,6 +44,8 @@ namespace WpfApplication1
             this.m_typing = new typing();
             initForm(true);
 
+            this.skel.Visibility = Visibility.Hidden;
+            this.yamochi.Visibility = Visibility.Hidden;
             this.label5.Content = tP.getGameModeString();
             this.label6.Content = "Easy";
             this.label7.Content = "Normal";
@@ -78,10 +84,24 @@ namespace WpfApplication1
                             this.disTimer.Stop();
                         }
                     }
+                    tP.incPlayCount();
                 }
                 tP.clearPoolString();
-                this.label1.FontSize = 65;
-                this.label1.Content = "Hit\nSpace key!";
+                this.label1.FontSize = 60;
+
+                this.label1.Content = tP.getCurrentPlayerString();
+                if(tP.getGameMode() == typingParams.GAME_MODE.CHAMPION_MODE)
+                {
+                    this.label1.Foreground = new SolidColorBrush(Colors.Red);
+                    this.label1.FontWeight = FontWeights.ExtraBold;
+                    this.label1.Content += " Try!!!\nHit Space key!";
+                }
+                else
+                {
+                    this.label1.Foreground = new SolidColorBrush(Colors.Blue);
+                    this.label1.FontWeight = FontWeights.Normal;
+                    this.label1.Content += " Player\nHit Space key!";
+                }
                 this.label2.Content = "";
                 this.label4.Content = "";
 
@@ -99,15 +119,80 @@ namespace WpfApplication1
             typingParams tP = typingParams.getInstance();
             tP.incInputTime();
             label4.Content = String.Format("{0:F2}", tP.getInputTime());
+
+            if (tP.getGameMode() == typingParams.GAME_MODE.CHAMPION_MODE)
+            {
+                /* xx秒(default:30)でタイムオーバー */
+                if (tP.getInputTime() >= tP.getTimeLimit())
+                {
+                    this.disTimer.Stop();
+
+                    /* 動作上 30.01秒で止まって見栄えが良くないので */
+                    /* 見せかけだけ 30秒に見える様に調整            */
+                    label4.Content = String.Format("{0:F2}", Convert.ToDouble(tP.getTimeLimit()));
+
+                    this.label3.FontSize = 60;
+                    this.label3.Content = "GAME\nOVER";
+
+                    /* プレイ回数３回につき１回は骸骨じゃなく矢持さんを表示 */
+                    if((tP.getPlayCount() % 3) == 0){
+                        this.yamochi.Visibility = Visibility.Visible;
+                    }
+                    else{
+                        this.skel.Visibility = Visibility.Visible;
+                    }
+
+                    this.label3.Visibility = Visibility.Visible;
+                    this.isGameOver = true;
+
+                }
+
+                /* 0.1秒ごとに色を変える */
+                if(++m_changeTimingCount == 10){
+                    m_changeTimingCount = 0;
+                    m_bgRatio = (m_bgRatio < 255) ? Convert.ToByte(++m_bgRatio) : Convert.ToByte(255);
+                    byte b = 0xFF;
+                    byte bd = Convert.ToByte(b - m_bgRatio);
+                    this.MainForm.Background
+                        = new SolidColorBrush(Color.FromArgb(b, b, bd, bd));
+                
+                }
+            }
+
         }
 
         private void onKeyDown(object sender, KeyEventArgs e)
         {
             typingParams tP = typingParams.getInstance();
             String enter = e.Key.ToString();
+            
+            Debug.WriteLine(enter);
+
+            if (this.isGameOver == true)
+            {
+                if ((enter.Equals("Space") == true) || (enter.Equals("Eacape") == true))
+                {
+                    this.isGameOver = false;
+                    this.skel.Visibility = Visibility.Hidden;
+                    this.yamochi.Visibility = Visibility.Hidden;
+
+                    tP.setTimerState(false);
+                    tP.clearInputTime();
+
+                    initForm(true);
+                    this.m_bgRatio = 0x0;
+                    this.label1.Visibility = Visibility.Visible;
+                    this.MainForm.Background = new SolidColorBrush(Colors.AliceBlue);
+                    this.label3.Visibility = Visibility.Hidden;
+                    this.label5.Content = tP.getGameModeString();
+                    this.label6.Visibility = Visibility.Visible;
+                    this.label7.Visibility = Visibility.Visible;
+                    this.label8.Visibility = Visibility.Visible;
+                }
+                return;
+            }
 
             typingParams.GAME_STATE r_inf = this.m_typing.KeyDown(enter);
-
             this.MainForm.Background = new SolidColorBrush(Colors.AliceBlue);
             this.label1.Visibility = Visibility.Visible;
             this.label3.Visibility = Visibility.Hidden;
@@ -123,6 +208,8 @@ namespace WpfApplication1
 
                         tP.setFirstChar();
 
+                        this.label1.Foreground = new SolidColorBrush(Colors.Blue);
+                        this.label1.FontWeight = FontWeights.Normal;
                         this.label1.FontSize = 300;
                         this.label1.Content = tP.getViewString();
                         this.label6.Visibility = Visibility.Hidden;
@@ -158,6 +245,8 @@ namespace WpfApplication1
 
                 case typingParams.GAME_STATE.MISS_ENTER:
                     {
+                        this.label3.Content = "Miss!!";
+                        this.label3.FontSize = 180;
                         this.label1.Visibility = Visibility.Hidden;
                         this.label3.Visibility = Visibility.Visible;
                         this.MainForm.Background = new SolidColorBrush(Colors.PaleVioletRed);
@@ -180,12 +269,31 @@ namespace WpfApplication1
 
                 case typingParams.GAME_STATE.GAME_IS_OVER:
                     {
+                        String resultString = "";
                         this.disTimer.Stop();
                         this.label1.Content = tP.getViewString();
 
-                        String tex = this.m_typing.getGameResult();
-                        System.Windows.MessageBox.Show(tex, "結果発表");
+                        resultString = this.m_typing.getGameResult();
+                        this.m_typing.writeResultDataToFile(resultString);
+                        System.Windows.MessageBox.Show(resultString,
+                                                       "結果発表");
                         initForm(true);
+                        this.label5.Content = tP.getGameModeString();
+                        this.label6.Visibility = Visibility.Visible;
+                        this.label7.Visibility = Visibility.Visible;
+                        this.label8.Visibility = Visibility.Visible;
+                        break;
+                    }
+
+                case typingParams.GAME_STATE.TERMINATE_GAME:
+                    {
+                        this.disTimer.Stop();
+                        
+                        tP.setTimerState(false);
+                        tP.clearInputTime();
+
+                        initForm(true);
+                        this.m_bgRatio = 0x0;
                         this.label5.Content = tP.getGameModeString();
                         this.label6.Visibility = Visibility.Visible;
                         this.label7.Visibility = Visibility.Visible;
@@ -196,7 +304,6 @@ namespace WpfApplication1
                 default:
                     break;
             }
-            Debug.WriteLine(enter);
         }
 
         private void onMouseDown(object sender, MouseButtonEventArgs e)
@@ -206,7 +313,13 @@ namespace WpfApplication1
 
         private void EasyMouseMove(object sender, MouseEventArgs e)
         {
+            typingParams tP = typingParams.getInstance();
             label6.Foreground = new SolidColorBrush(Colors.Aqua);
+            this.label1.Foreground = new SolidColorBrush(Colors.Blue);
+            this.label1.FontWeight = FontWeights.Normal;
+            this.label1.Content = tP.getCurrentPlayerString() +
+                                  " Player\nHit Space key!";
+            this.label5.Content = tP.getGameModeString();
         }
 
         private void EasyMouseLeave(object sender, MouseEventArgs e)
@@ -218,12 +331,17 @@ namespace WpfApplication1
         {
             typingParams tP = typingParams.getInstance();
             tP.setGameMode("easy");
-            this.label5.Content = tP.getGameModeString();
         }
 
         private void NormalMouseMove(object sender, MouseEventArgs e)
         {
+            typingParams tP = typingParams.getInstance();
             label7.Foreground = new SolidColorBrush(Colors.Aqua);
+            this.label1.Foreground = new SolidColorBrush(Colors.Blue);
+            this.label1.FontWeight = FontWeights.Normal;
+            this.label1.Content = tP.getCurrentPlayerString() +
+                                  " Player\nHit Space key!";
+            this.label5.Content = tP.getGameModeString();
         }
 
         private void NormalMouseLeave(object sender, MouseEventArgs e)
@@ -235,12 +353,15 @@ namespace WpfApplication1
         {
             typingParams tP = typingParams.getInstance();
             tP.setGameMode("normal");
-            this.label5.Content = tP.getGameModeString();
         }
 
         private void ChampionMouseMove(object sender, MouseEventArgs e)
         {
+            typingParams tP = typingParams.getInstance();
             label8.Foreground = new SolidColorBrush(Colors.Aqua);
+            this.label1.Foreground = new SolidColorBrush(Colors.Red);
+            this.label1.FontWeight = FontWeights.ExtraBold;
+            this.label1.Content = "Hey Champ!\nHit Space key!";
         }
 
         private void ChampionMouseLeave(object sender, MouseEventArgs e)
